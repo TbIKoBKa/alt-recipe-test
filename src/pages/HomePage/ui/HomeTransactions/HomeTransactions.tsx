@@ -34,7 +34,9 @@ export const HomeTransactions: FC = () => {
     },
   });
 
-  const initLastLoadedBlock = useCallback(async () => {
+  const init = useCallback(async () => {
+    setLastLoadedBlock(null);
+    setTransactions([]);
     const num = await getBlockNumber({
       cacheTime: 30000,
     });
@@ -72,18 +74,14 @@ export const HomeTransactions: FC = () => {
   }, [address, lastLoadedBlock]);
 
   useEffect(() => {
-    initLastLoadedBlock();
-  }, [initLastLoadedBlock]);
+    init();
+  }, [init, address]);
 
   useEffect(() => {
     if (blockInited) {
       getTransactions();
     }
   }, [blockInited]);
-
-  useEffect(() => {
-    setTransactions([]);
-  }, [address]);
 
   const loading = isLoading || !lastLoadedBlock;
 
