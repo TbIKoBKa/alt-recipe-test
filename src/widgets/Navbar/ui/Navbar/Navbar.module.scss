@@ -1,0 +1,30 @@
+.root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--navbar-height-xl);
+    background-color: var(--inverted-bg-color);
+    z-index: var(--navbar-z-index);
+    padding: 0 16px;
+
+    @media screen and (max-width: 1920px) {
+        height: var(--navbar-height-l);
+    }
+
+    @media screen and (max-width: 1024px) {
+        padding: 0 24px;
+    }
+
+    @media screen and (max-width: 768px) {
+        height: var(--navbar-height-m);
+    }
+}
+
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    max-width: var(--content-width-xl);
+}
+

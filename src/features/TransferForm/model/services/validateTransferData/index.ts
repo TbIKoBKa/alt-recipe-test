@@ -1,0 +1,1 @@
+export { validateTransferData } from './validateTransferData';

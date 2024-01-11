@@ -1,0 +1,1 @@
+export { useIsSupportedChain } from './useIsSupportedChain';

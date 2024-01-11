@@ -1,0 +1,22 @@
+.root {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.label {
+    display: flex;
+    flex-direction: column;
+}
+
+.input {
+    border-radius: 8px;
+    height: 40px;
+    border: 1px solid var(--primary-color);
+    outline: 0;
+    padding: 4px 8px;
+
+    &.error {
+        border-color: var(--orange-dark);
+    }
+}

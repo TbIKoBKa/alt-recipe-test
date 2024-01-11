@@ -1,0 +1,25 @@
+.root {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--transaction-bg);
+    border: 1px solid var(--transaction-border);
+    border-radius: 8px;
+    padding: 16px;
+    min-width: fit-content;
+    gap: 24px;
+
+    @media screen and (max-width: 768px) {
+        padding: 16px 8px;
+    }
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.value {
+    white-space: nowrap;
+}
