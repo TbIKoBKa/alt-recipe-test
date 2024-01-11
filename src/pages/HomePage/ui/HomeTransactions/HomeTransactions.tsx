@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useState } from 'react';
-import { useAccount, usePublicClient } from 'wagmi';
+import { useAccount, usePublicClient, useWatchBlocks } from 'wagmi';
 import { Transaction, isAddressEqual } from 'viem';
 
 import { Text } from '@/shared/ui/Text';
@@ -20,6 +20,20 @@ export const HomeTransactions: FC = () => {
 
   const blockInited = !!lastLoadedBlock;
 
+  useWatchBlocks({
+    includeTransactions: true,
+    onBlock: (block) => {
+      if (address) {
+        setTransactions((prev) => {
+          const txsFiltered = (block.transactions as Transaction[]).filter(
+            (tx) => (tx.to && isAddressEqual(address, tx.to)) || isAddressEqual(address, tx.from)
+          );
+          return txsFiltered.concat(prev);
+        });
+      }
+    },
+  });
+
   const initLastLoadedBlock = useCallback(async () => {
     const num = await getBlockNumber({
       cacheTime: 30000,
@@ -34,23 +48,26 @@ export const HomeTransactions: FC = () => {
       const fromBlock = lastLoadedBlock - DEFAULT_STEP - 1n;
       const toBlock = lastLoadedBlock - 1n;
 
-      console.log('🚀 ~ getTransactions ~ lastLoadedBlock:', fromBlock, toBlock);
-      for (let i = fromBlock; i < toBlock; i++) {
-        const block = await getBlock({
-          includeTransactions: true,
-          blockNumber: i,
-        });
+      try {
+        for (let i = fromBlock; i < toBlock; i++) {
+          const block = await getBlock({
+            includeTransactions: true,
+            blockNumber: i,
+          });
 
-        const txs = block.transactions as Transaction[];
-        const txsFiltered = txs.filter(
-          (tx) => (tx.to && isAddressEqual(address, tx.to)) || isAddressEqual(address, tx.from)
-        );
+          const txs = block.transactions as Transaction[];
+          const txsFiltered = txs.filter(
+            (tx) => (tx.to && isAddressEqual(address, tx.to)) || isAddressEqual(address, tx.from)
+          );
 
-        setTransactions((prev) => prev?.concat(txsFiltered));
+          setTransactions((prev) => prev?.concat(txsFiltered));
+        }
+      } catch (error) {
+      } finally {
+        setIsLoading(false);
       }
 
       setLastLoadedBlock(fromBlock);
-      setIsLoading(false);
     }
   }, [address, lastLoadedBlock]);
 

@@ -11,7 +11,7 @@ export const WagmiProvider: FC<IWagmiProviderProps> = (props) => {
   const { children } = props;
 
   return (
-    <WagmiProviderCore reconnectOnMount config={config}>
+    <WagmiProviderCore config={config}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </WagmiProviderCore>
   );
